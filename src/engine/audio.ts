@@ -4,117 +4,116 @@ export interface MusicTrackMeta {
   id: string;
   title: string;
   subtitle: string;
-  tempo: number;
-  rootHz: number;
-  scale: number[]; // semitone offsets
-  progression: number[][]; // scale degree chords
-  motif: number[]; // semitone offsets for lead motif
-  timbre: 'piano' | 'cello' | 'guitarra' | 'glass';
+  tempo: number; // BPM
+  rootMidi: number; // e.g., 50 = D3
+  chords: number[][]; // semitone offsets from rootMidi
+  melody: (number | null)[]; // semitone offsets from rootMidi + 12, null = rest
+  style: 'intimate_piano' | 'warm_cello' | 'glass_lullaby' | 'coastal_guitar';
 }
 
 export const MUSIC_TRACKS: MusicTrackMeta[] = [
   {
     id: 'tema_farol',
     title: 'O Feixe Sobre a Água',
-    subtitle: 'Tema do Farol (ascendente, piano e violoncelo)',
-    tempo: 62,
-    rootHz: 146.83, // D3
-    scale: [0, 2, 3, 5, 7, 8, 10, 12, 14, 15],
-    progression: [
-      [0, 2, 4],
-      [5, 7, 9],
-      [3, 5, 7],
-      [4, 6, 8],
+    subtitle: 'Piano de feltro e violoncelo longo em Ré menor',
+    tempo: 52,
+    rootMidi: 50, // D3
+    chords: [
+      [0, 7, 12, 15],   // Dm9
+      [-4, 3, 7, 12],   // Bbmaj7
+      [-5, 0, 7, 12],   // Gmadd9
+      [-2, 4, 7, 11],   // A7sus4
     ],
-    motif: [0, 3, 7, 12, 10, 7], // ascending lighthouse motif
-    timbre: 'piano',
+    melody: [12, 15, 19, null, 17, 15, 14, null, 12, 10, 7, null, 9, 10, 12, null],
+    style: 'warm_cello',
   },
   {
     id: 'tema_ines',
     title: 'Palavras Sem Tradução',
-    subtitle: 'Tema de Inês (piano íntimo e caderno)',
-    tempo: 58,
-    rootHz: 164.81, // E3
-    scale: [0, 2, 3, 5, 7, 8, 11, 12, 14],
-    progression: [
-      [0, 2, 4],
-      [3, 5, 7],
-      [5, 7, 9],
-      [4, 6, 8],
+    subtitle: 'Piano íntimo noturno com reverberação de catedral',
+    tempo: 48,
+    rootMidi: 52, // E3
+    chords: [
+      [0, 7, 11, 15],   // Em9
+      [-4, 0, 7, 12],   // Cmaj7
+      [-5, 2, 7, 11],   // Gmaj7
+      [-2, 5, 9, 14],   // Dadd9
     ],
-    motif: [7, 5, 3, 2, 3, 7],
-    timbre: 'piano',
+    melody: [19, 15, 14, null, 12, 11, 7, null, 11, 12, 15, null, 14, null, null, null],
+    style: 'intimate_piano',
   },
   {
     id: 'tema_celeste',
     title: 'Chá de Lúcia-Lima',
-    subtitle: 'Tema da Avó Celeste (violoncelo quente e guitarra portuguesa)',
-    tempo: 64,
-    rootHz: 130.81, // C3
-    scale: [0, 2, 4, 5, 7, 9, 11, 12, 14, 16],
-    progression: [
-      [0, 2, 4],
-      [5, 0, 2],
-      [3, 5, 7],
-      [4, 6, 1],
+    subtitle: 'Violoncelo acústico e dedilhado quente de guitarra',
+    tempo: 54,
+    rootMidi: 48, // C3
+    chords: [
+      [0, 7, 12, 16],   // Cmaj7
+      [-3, 4, 9, 12],   // Am7
+      [-7, 0, 5, 9],    // Fmaj7
+      [-5, 2, 7, 11],   // G6
     ],
-    motif: [4, 7, 9, 7, 4, 2, 0],
-    timbre: 'guitarra',
+    melody: [16, 19, 21, null, 19, 16, 14, null, 12, 14, 16, null, 12, null, null, null],
+    style: 'coastal_guitar',
   },
   {
     id: 'tema_mara',
     title: 'Menina das Dunas',
-    subtitle: 'Tema da Mara (três notas descendentes em vidro e harpa)',
-    tempo: 54,
-    rootHz: 196.0, // G3
-    scale: [0, 2, 3, 5, 7, 8, 10, 12, 15],
-    progression: [
-      [0, 2, 4],
-      [5, 7, 2],
-      [3, 5, 0],
-      [4, 7, 1],
+    subtitle: 'Três notas descendentes em harpa de vidro e mar calmo',
+    tempo: 46,
+    rootMidi: 55, // G3
+    chords: [
+      [0, 7, 10, 15],   // Gm
+      [-4, 3, 7, 10],   // Ebmaj7
+      [-2, 5, 8, 12],   // Fm7
+      [-5, 2, 7, 10],   // Dm7
     ],
-    motif: [10, 8, 7, -1, 10, 8, 7], // 3 descending notes signature
-    timbre: 'glass',
+    // Signature 3 descending notes: Eb5 -> D5 -> C5
+    melody: [20, 19, 17, null, null, 15, 14, 12, null, null, 20, 19, 17, null, null, null],
+    style: 'glass_lullaby',
   },
   {
     id: 'tema_vila',
     title: 'Cal Branca e Calçada',
-    subtitle: 'Tema da Vila de Névoa (guitarra portuguesa subtil)',
-    tempo: 72,
-    rootHz: 146.83,
-    scale: [0, 2, 4, 5, 7, 9, 10, 12, 14],
-    progression: [
-      [0, 2, 4],
-      [3, 5, 7],
-      [0, 2, 4],
-      [4, 6, 8],
+    subtitle: 'Acordes suaves de fim de tarde na costa',
+    tempo: 56,
+    rootMidi: 50, // D3
+    chords: [
+      [0, 7, 12, 16],
+      [-5, 2, 7, 11],
+      [-3, 4, 9, 13],
+      [-5, 2, 7, 14],
     ],
-    motif: [0, 4, 7, 9, 7, 4],
-    timbre: 'guitarra',
+    melody: [16, 14, 12, null, 14, 16, 19, null, 17, 16, 14, null, 12, null, null, null],
+    style: 'coastal_guitar',
   },
   {
     id: 'tema_quarto',
     title: 'Duas Camas',
-    subtitle: 'Noturno da casa de infância (piano suspenso e eco)',
-    tempo: 50,
-    rootHz: 138.59, // C#3
-    scale: [0, 2, 3, 5, 7, 8, 10, 12, 15],
-    progression: [
-      [0, 2, 4],
-      [5, 7, 2],
-      [3, 5, 7],
-      [0, 4, 7],
+    subtitle: 'Piano suspenso e cordas graves na penumbra',
+    tempo: 44,
+    rootMidi: 49, // C#3
+    chords: [
+      [0, 7, 12, 15],
+      [-4, 3, 8, 12],
+      [-2, 5, 8, 12],
+      [-5, 3, 7, 12],
     ],
-    motif: [10, 8, 7, 3, 2, 0],
-    timbre: 'cello',
+    melody: [15, 14, 12, null, 7, null, 12, 10, 7, null, null, null, 3, null, null, null],
+    style: 'warm_cello',
   },
 ];
+
+function midiToHz(midi: number): number {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
 
 export class AdaptiveAudioEngine {
   private ctx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
   private musicGain: GainNode | null = null;
+  private reverbNode: ConvolverNode | null = null;
   private ambientGain: GainNode | null = null;
   private sfxGain: GainNode | null = null;
 
@@ -123,7 +122,7 @@ export class AdaptiveAudioEngine {
   private stepTimer: number | null = null;
   private ambientCleanup: (() => void) | null = null;
   private stepIndex = 0;
-  private courageOffset = 0; // coragem - negacao controls harmonic warmth & cello stem
+  private courageOffset = 0;
 
   private settings: GameSettings;
 
@@ -133,18 +132,34 @@ export class AdaptiveAudioEngine {
 
   public unlock(): void {
     if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) return;
       this.ctx = new AudioCtx();
+
       this.masterGain = this.ctx.createGain();
       this.musicGain = this.ctx.createGain();
       this.ambientGain = this.ctx.createGain();
       this.sfxGain = this.ctx.createGain();
 
-      this.musicGain.connect(this.masterGain);
+      // Create lush algorithmic concert hall reverb impulse (3.4s tail)
+      this.reverbNode = this.createConcertHallReverb(3.4, 2.6);
+      const wetGain = this.ctx.createGain();
+      const dryGain = this.ctx.createGain();
+      wetGain.gain.value = 0.52;
+      dryGain.gain.value = 0.68;
+
+      this.musicGain.connect(dryGain);
+      this.musicGain.connect(this.reverbNode);
+      this.reverbNode.connect(wetGain);
+
+      dryGain.connect(this.masterGain);
+      wetGain.connect(this.masterGain);
       this.ambientGain.connect(this.masterGain);
       this.sfxGain.connect(this.masterGain);
       this.masterGain.connect(this.ctx.destination);
+
       this.applySettings(this.settings);
     }
     if (this.ctx && this.ctx.state === 'suspended') {
@@ -152,13 +167,33 @@ export class AdaptiveAudioEngine {
     }
   }
 
+  private createConcertHallReverb(durationSec: number, decay: number): ConvolverNode {
+    const rate = this.ctx!.sampleRate;
+    const length = Math.floor(rate * durationSec);
+    const impulse = this.ctx!.createBuffer(2, length, rate);
+    for (let ch = 0; ch < 2; ch++) {
+      const data = impulse.getChannelData(ch);
+      let lp = 0;
+      for (let i = 0; i < length; i++) {
+        const env = Math.pow(1 - i / length, decay);
+        const white = Math.random() * 2 - 1;
+        // Low-pass dampened tail so high frequencies melt warmly like a real piano hall
+        lp = lp * 0.88 + white * 0.12;
+        data[i] = lp * env * 0.7;
+      }
+    }
+    const convolver = this.ctx!.createConvolver();
+    convolver.buffer = impulse;
+    return convolver;
+  }
+
   public applySettings(settings: GameSettings): void {
     this.settings = settings;
     if (!this.ctx || !this.musicGain || !this.ambientGain || !this.sfxGain) return;
     const now = this.ctx.currentTime;
-    this.musicGain.gain.setTargetAtTime(settings.musicVol * 0.45, now, 0.08);
-    this.ambientGain.gain.setTargetAtTime(settings.ambientVol * 0.35, now, 0.08);
-    this.sfxGain.gain.setTargetAtTime(settings.sfxVol * 0.55, now, 0.05);
+    this.musicGain.gain.setTargetAtTime(settings.musicVol * 0.55, now, 0.12);
+    this.ambientGain.gain.setTargetAtTime(settings.ambientVol * 0.25, now, 0.12);
+    this.sfxGain.gain.setTargetAtTime(settings.sfxVol * 0.5, now, 0.06);
   }
 
   public setCourageBalance(coragem: number, negacao: number): void {
@@ -166,7 +201,7 @@ export class AdaptiveAudioEngine {
   }
 
   public playMusic(trackId: string | null): void {
-    if (this.currentTrackId === trackId) return;
+    if (this.currentTrackId === trackId && this.stepTimer !== null) return;
     this.currentTrackId = trackId;
     if (this.stepTimer !== null) {
       window.clearInterval(this.stepTimer);
@@ -176,99 +211,142 @@ export class AdaptiveAudioEngine {
     const track = MUSIC_TRACKS.find((m) => m.id === trackId) ?? MUSIC_TRACKS[0];
     this.stepIndex = 0;
 
-    const beatMs = Math.round((60 / track.tempo) * 1000);
+    const eighthMs = Math.round((60 / track.tempo / 2) * 1000);
     const tick = () => {
       if (!this.ctx || this.ctx.state !== 'running' || !this.musicGain) return;
-      this.scheduleMusicBeat(track, this.stepIndex++);
+      this.scheduleStep(track, this.stepIndex++);
     };
     tick();
-    this.stepTimer = window.setInterval(tick, beatMs);
+    this.stepTimer = window.setInterval(tick, eighthMs);
   }
 
-  private scheduleMusicBeat(track: MusicTrackMeta, step: number): void {
+  private scheduleStep(track: MusicTrackMeta, step: number): void {
     if (!this.ctx || !this.musicGain) return;
-    const bar = Math.floor(step / 4) % track.progression.length;
-    const beatInBar = step % 4;
-    const chord = track.progression[bar];
+    const stepInBar = step % 4;
+    const barIdx = Math.floor(step / 4) % track.chords.length;
+    const chord = track.chords[barIdx];
 
-    // Warm pad / cello stem on beat 0
-    if (beatInBar === 0) {
-      const rootSemitone = track.scale[chord[0]] ?? 0;
-      const rootFreq = track.rootHz * Math.pow(2, rootSemitone / 12);
-      this.triggerPadNote(rootFreq, (60 / track.tempo) * 3.8, 0.16);
+    // 1. Rolled felt-piano chord & warm cello bass on beat 0 of every bar
+    if (stepInBar === 0) {
+      const barDurationSec = (60 / track.tempo) * 3.8;
+      // Deep warm cello swell on root note
+      this.playWarmCelloPad(midiToHz(track.rootMidi + chord[0] - 12), barDurationSec, 0.12);
 
-      // Adaptive stem: if coragem >= negacao, add warm fifth cello harmonic
-      if (this.courageOffset >= 0) {
-        const fifthSemitone = track.scale[chord[2]] ?? 7;
-        const fifthFreq = track.rootHz * Math.pow(2, fifthSemitone / 12);
-        this.triggerPadNote(fifthFreq, (60 / track.tempo) * 3.4, 0.09);
+      // Gently arpeggiated piano chord voicing
+      chord.forEach((semi, idx) => {
+        const delaySec = idx * 0.075;
+        const freq = midiToHz(track.rootMidi + semi);
+        this.playFeltPianoNote(freq, 3.2, 0.085 - idx * 0.01, delaySec);
+      });
+
+      // Adaptive courage stem: warm octave shimmer when coragem >= negacao
+      if (this.courageOffset > 0) {
+        const topSemi = chord[chord.length - 1] + 12;
+        this.playWarmCelloPad(midiToHz(track.rootMidi + topSemi), barDurationSec * 0.85, 0.045);
       }
     }
 
-    // Arpeggio / motif notes
-    const motifIdx = step % track.motif.length;
-    const motifSemi = track.motif[motifIdx];
-    if (motifSemi >= 0) {
-      const freq = track.rootHz * 2 * Math.pow(2, motifSemi / 12);
-      this.triggerPluckOrPiano(freq, track.timbre, beatInBar === 0 ? 0.22 : 0.14);
+    // 2. Expressive sparse melody note
+    const melSemi = track.melody[step % track.melody.length];
+    if (melSemi !== null && melSemi !== undefined) {
+      const freq = midiToHz(track.rootMidi + melSemi);
+      const isGlass = track.style === 'glass_lullaby';
+      this.playFeltPianoNote(freq, isGlass ? 3.8 : 2.8, isGlass ? 0.11 : 0.135, 0.02);
     }
   }
 
-  private triggerPadNote(freq: number, durationSec: number, peak: number): void {
+  /**
+   * Synthesizes a realistic, warm felt-piano note (like Gris / Florence):
+   * - Soft hammer transient + warm fundamental sine + detuned 2nd harmonic + dynamic low-pass key filter
+   */
+  private playFeltPianoNote(
+    freq: number,
+    decaySec: number,
+    peakGain: number,
+    delaySec = 0
+  ): void {
     if (!this.ctx || !this.musicGain) return;
-    const now = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
+    const start = this.ctx.currentTime + delaySec;
+
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
     const filter = this.ctx.createBiquadFilter();
-    const gain = this.ctx.createGain();
+    const env = this.ctx.createGain();
 
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(freq, now);
+    osc1.type = 'sine';
+    osc2.type = 'triangle';
+    osc1.frequency.setValueAtTime(freq, start);
+    osc2.frequency.setValueAtTime(freq * 2, start); // 2nd harmonic octave
+    osc2.detune.setValueAtTime(3.5, start); // warm chorus detune
 
+    const g1 = this.ctx.createGain();
+    const g2 = this.ctx.createGain();
+    g1.gain.value = 0.82;
+    g2.gain.value = 0.14; // subtle overtone
+
+    // Felt damper low-pass filter that starts gently bright and darkens as the note rings out
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(420 + Math.max(0, this.courageOffset) * 60, now);
+    filter.frequency.setValueAtTime(Math.min(2400, freq * 4.2), start);
+    filter.frequency.exponentialRampToValueAtTime(Math.max(280, freq * 1.15), start + decaySec);
 
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.linearRampToValueAtTime(peak, now + 0.6);
-    gain.gain.exponentialRampToValueAtTime(0.0005, now + durationSec);
+    env.gain.setValueAtTime(0.0001, start);
+    env.gain.linearRampToValueAtTime(peakGain, start + 0.035); // soft felt hammer attack
+    env.gain.exponentialRampToValueAtTime(peakGain * 0.32, start + 0.45);
+    env.gain.exponentialRampToValueAtTime(0.0002, start + decaySec);
 
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.musicGain);
+    osc1.connect(g1);
+    osc2.connect(g2);
+    g1.connect(filter);
+    g2.connect(filter);
+    filter.connect(env);
+    env.connect(this.musicGain);
 
-    osc.start(now);
-    osc.stop(now + durationSec + 0.05);
+    osc1.start(start);
+    osc2.start(start);
+    osc1.stop(start + decaySec + 0.08);
+    osc2.stop(start + decaySec + 0.08);
   }
 
-  private triggerPluckOrPiano(freq: number, timbre: MusicTrackMeta['timbre'], peak: number): void {
+  /**
+   * Synthesizes a bowed cello / warm pad swell with gentle vibrato and low-pass warmth
+   */
+  private playWarmCelloPad(freq: number, durationSec: number, peakGain: number): void {
     if (!this.ctx || !this.musicGain) return;
     const now = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const sub = this.ctx.createOscillator();
-    const filter = this.ctx.createBiquadFilter();
-    const gain = this.ctx.createGain();
 
-    osc.type = timbre === 'guitarra' ? 'triangle' : timbre === 'glass' ? 'sine' : 'triangle';
-    sub.type = 'sine';
-    osc.frequency.setValueAtTime(freq, now);
-    sub.frequency.setValueAtTime(freq * (timbre === 'guitarra' ? 2 : 0.5), now);
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const filter = this.ctx.createBiquadFilter();
+    const env = this.ctx.createGain();
+
+    osc1.type = 'triangle';
+    osc2.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(freq, now);
+    osc2.frequency.setValueAtTime(freq, now);
+    osc2.detune.setValueAtTime(-6, now);
+
+    const g2 = this.ctx.createGain();
+    g2.gain.value = 0.25;
 
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(timbre === 'guitarra' ? 1800 : 1200, now);
+    filter.frequency.setValueAtTime(340, now);
+    filter.frequency.linearRampToValueAtTime(520, now + durationSec * 0.45);
+    filter.frequency.linearRampToValueAtTime(280, now + durationSec);
 
-    const decay = timbre === 'glass' ? 2.4 : 1.75;
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.linearRampToValueAtTime(peak, now + 0.025);
-    gain.gain.exponentialRampToValueAtTime(0.0004, now + decay);
+    env.gain.setValueAtTime(0.0001, now);
+    env.gain.linearRampToValueAtTime(peakGain, now + durationSec * 0.35);
+    env.gain.exponentialRampToValueAtTime(0.0003, now + durationSec);
 
-    osc.connect(filter);
-    sub.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.musicGain);
+    osc1.connect(filter);
+    osc2.connect(g2);
+    g2.connect(filter);
+    filter.connect(env);
+    env.connect(this.musicGain);
 
-    osc.start(now);
-    sub.start(now);
-    osc.stop(now + decay + 0.05);
-    sub.stop(now + decay + 0.05);
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + durationSec + 0.08);
+    osc2.stop(now + durationSec + 0.08);
   }
 
   public playAmbient(ambientId: string | null): void {
@@ -280,18 +358,15 @@ export class AdaptiveAudioEngine {
     }
     if (!ambientId || !this.ctx || !this.ambientGain) return;
 
-    // Create pink-ish noise buffer for sea/wind/train/hearth
-    const bufferSize = this.ctx.sampleRate * 3;
+    // Soft brown/pink noise for realistic distant ocean surf or hearth warmth
+    const bufferSize = this.ctx.sampleRate * 4;
     const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
     const data = buffer.getChannelData(0);
-    let b0 = 0, b1 = 0, b2 = 0, b3 = 0;
+    let lastOut = 0;
     for (let i = 0; i < bufferSize; i++) {
       const white = Math.random() * 2 - 1;
-      b0 = 0.997 * b0 + white * 0.029;
-      b1 = 0.985 * b1 + white * 0.032;
-      b2 = 0.950 * b2 + white * 0.048;
-      b3 = 0.850 * b3 + white * 0.065;
-      data[i] = (b0 + b1 + b2 + b3 + white * 0.04) * 0.35;
+      lastOut = (lastOut + 0.02 * white) / 1.02;
+      data[i] = lastOut * 0.45;
     }
 
     const noise = this.ctx.createBufferSource();
@@ -299,18 +374,18 @@ export class AdaptiveAudioEngine {
     noise.loop = true;
 
     const filter = this.ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = ambientId === 'comboio' ? 190 : ambientId === 'cozinha' ? 320 : 260;
-    filter.Q.value = ambientId === 'mar_vento' ? 1.4 : 0.9;
+    filter.type = 'lowpass';
+    filter.frequency.value = ambientId === 'comboio' ? 160 : ambientId === 'cozinha' ? 240 : 210;
 
     const lfo = this.ctx.createOscillator();
     const lfoGain = this.ctx.createGain();
-    lfo.frequency.value = ambientId === 'comboio' ? 2.2 : 0.14; // wave swell or train cadence
-    lfoGain.gain.value = ambientId === 'comboio' ? 95 : 130;
-    lfo.connect(filter.frequency);
+    lfo.frequency.value = ambientId === 'comboio' ? 1.6 : 0.11; // 9-second ocean wave period
+    lfoGain.gain.value = ambientId === 'comboio' ? 45 : 85;
+    lfo.connect( lfoGain );
+    lfoGain.connect(filter.frequency);
 
     const localGain = this.ctx.createGain();
-    localGain.gain.value = 0.45;
+    localGain.gain.value = 0.32;
 
     noise.connect(filter);
     filter.connect(localGain);
@@ -338,61 +413,38 @@ export class AdaptiveAudioEngine {
     const now = this.ctx.currentTime;
 
     if (kind === 'knock3') {
-      // Three distinct wooden window knocks: toc, toc, toc
-      [0, 0.34, 0.68].forEach((offset) => {
+      [0, 0.36, 0.72].forEach((offset) => {
         this.triggerWoodKnock(now + offset);
       });
       return;
     }
 
     if (kind === 'bell' || kind === 'memory') {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(kind === 'memory' ? 784 : 659.25, now);
-      osc.frequency.exponentialRampToValueAtTime(kind === 'memory' ? 1174.66 : 523.25, now + 0.9);
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.24, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0005, now + 1.1);
-      osc.connect(gain);
-      gain.connect(this.sfxGain);
-      osc.start(now);
-      osc.stop(now + 1.15);
+      const freq = kind === 'memory' ? 587.33 : 523.25;
+      this.playFeltPianoNote(freq, 2.2, 0.16, 0);
+      if (kind === 'memory') {
+        this.playFeltPianoNote(freq * 1.5, 2.5, 0.12, 0.14);
+      }
       return;
     }
 
     if (kind === 'foghorn') {
-      const osc = this.ctx.createOscillator();
-      const filter = this.ctx.createBiquadFilter();
-      const gain = this.ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(87.31, now); // F2 deep horn
-      osc.frequency.linearRampToValueAtTime(82.41, now + 2.4);
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(220, now);
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.28, now + 0.35);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + 2.6);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.sfxGain);
-      osc.start(now);
-      osc.stop(now + 2.65);
+      this.playWarmCelloPad(73.42, 2.8, 0.22); // Deep D2 horn
       return;
     }
 
     if (kind === 'paper' || kind === 'choice' || kind === 'click') {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(kind === 'paper' ? 320 : 520, now);
-      osc.frequency.exponentialRampToValueAtTime(180, now + 0.08);
-      gain.gain.setValueAtTime(0.14, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(kind === 'paper' ? 280 : 440, now);
+      osc.frequency.exponentialRampToValueAtTime(160, now + 0.06);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
       osc.connect(gain);
       gain.connect(this.sfxGain);
       osc.start(now);
-      osc.stop(now + 0.09);
+      osc.stop(now + 0.07);
     }
   }
 
@@ -403,14 +455,14 @@ export class AdaptiveAudioEngine {
     const gain = this.ctx.createGain();
 
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(165, startTime);
-    osc.frequency.exponentialRampToValueAtTime(68, startTime + 0.09);
+    osc.frequency.setValueAtTime(155, startTime);
+    osc.frequency.exponentialRampToValueAtTime(62, startTime + 0.09);
 
     filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(240, startTime);
+    filter.frequency.setValueAtTime(220, startTime);
 
     gain.gain.setValueAtTime(0.001, startTime);
-    gain.gain.linearRampToValueAtTime(0.45, startTime + 0.006);
+    gain.gain.linearRampToValueAtTime(0.42, startTime + 0.006);
     gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.11);
 
     osc.connect(filter);

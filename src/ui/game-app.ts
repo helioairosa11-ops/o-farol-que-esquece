@@ -68,6 +68,7 @@ export class FarolGameApp {
   private currentMusic: string | null = null;
   private currentAmbient: string | null = null;
   private activeSprites: Record<string, { expr: string; pos: 'left' | 'center' | 'right' }> = {};
+  private currentSpeakerId: string | undefined = undefined;
 
   private inTitleScreen = true;
   private isTyping = false;
@@ -89,6 +90,7 @@ export class FarolGameApp {
   private toastStackEl!: HTMLElement;
   private captionEl!: HTMLElement;
   private dialogueWrapEl!: HTMLElement;
+  private speakerHeaderEl!: HTMLElement;
   private speakerTagEl!: HTMLElement;
   private dialogueTextEl!: HTMLElement;
   private overlayContainerEl!: HTMLElement;
@@ -125,10 +127,13 @@ export class FarolGameApp {
         <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
         <div class="sound-caption" id="sound-caption" style="display:none" aria-live="polite"></div>
         <div class="dialogue-wrap" id="dialogue-wrap" style="display:none">
-          <div class="speaker-tag" id="speaker-tag" style="display:none"></div>
+          <div class="speaker-header" id="speaker-header" style="display:none">
+            <span class="speaker-ornament">✦</span>
+            <span class="speaker-tag" id="speaker-tag"></span>
+          </div>
           <div class="dialogue-box" id="dialogue-box" role="button" tabindex="0" aria-label="Avançar diálogo">
             <div class="dialogue-text" id="dialogue-text" aria-live="polite"></div>
-            <div class="next-indicator"></div>
+            <div class="next-indicator">Continuar →</div>
           </div>
         </div>
         <div id="overlay-container"></div>
@@ -144,6 +149,7 @@ export class FarolGameApp {
     this.toastStackEl = this.root.querySelector('#toast-stack')!;
     this.captionEl = this.root.querySelector('#sound-caption')!;
     this.dialogueWrapEl = this.root.querySelector('#dialogue-wrap')!;
+    this.speakerHeaderEl = this.root.querySelector('#speaker-header')!;
     this.speakerTagEl = this.root.querySelector('#speaker-tag')!;
     this.dialogueTextEl = this.root.querySelector('#dialogue-text')!;
     this.overlayContainerEl = this.root.querySelector('#overlay-container')!;
@@ -161,7 +167,15 @@ export class FarolGameApp {
   }
 
   private applyAccessibilityClasses(): void {
-    document.body.classList.remove('font-hyperlegible', 'font-dyslexic', 'size-small', 'size-medium', 'size-large', 'high-contrast', 'reduce-motion');
+    document.body.classList.remove(
+      'font-hyperlegible',
+      'font-dyslexic',
+      'size-small',
+      'size-medium',
+      'size-large',
+      'high-contrast',
+      'reduce-motion'
+    );
     if (this.settings.fontFamily === 'hyperlegible') document.body.classList.add('font-hyperlegible');
     if (this.settings.fontFamily === 'dyslexic') document.body.classList.add('font-dyslexic');
     document.body.classList.add(`size-${this.settings.fontSize}`);
@@ -201,7 +215,6 @@ export class FarolGameApp {
       }
     });
 
-    // Swipe up on mobile for backlog
     let touchStartY = 0;
     this.stageEl.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0]?.clientY ?? 0;
@@ -221,31 +234,31 @@ export class FarolGameApp {
     this.spriteStageEl.innerHTML = '';
     this.setCg(null);
     this.setBackground('./assets/bg/title_farol.webp');
-    this.fx?.setConfig({ fogDensity: 0.7, beamActive: true, saltParticles: true });
 
     const recentSave = getMostRecentSave(config.saveSlots);
     const endingsCount = this.meta.unlockedEndings.length;
 
     this.overlayContainerEl.innerHTML = `
       <div class="title-screen">
-        <div class="title-card">
-          <div class="title-eyebrow">Névoa · Costa Oeste</div>
+        <div class="title-brand-block">
+          <div class="title-eyebrow">Névoa · Costa Oeste Portuguesa</div>
           <h1 class="title-heading">${config.title}</h1>
           <p class="title-subtitle">${t('menu.subtitle')}</p>
-          <div class="menu-list">
-            <button class="menu-btn" id="btn-continue" ${recentSave ? '' : 'disabled'}>${t('menu.continue')}</button>
-            <button class="menu-btn" id="btn-new">${t('menu.newGame')}</button>
-            <button class="menu-btn" id="btn-chapters">${t('menu.chapters')}</button>
-            <button class="menu-btn" id="btn-notebook">${t('menu.notebook')} (${this.meta.unlockedWords.length}/${NOTEBOOK_WORDS.length})</button>
-            <button class="menu-btn" id="btn-gallery">${t('menu.gallery')}</button>
-            <button class="menu-btn" id="btn-saves">${t('menu.saves')}</button>
-            <button class="menu-btn" id="btn-options">${t('menu.options')}</button>
-            <button class="menu-btn" id="btn-credits">${t('menu.credits')}</button>
-          </div>
-          <div class="title-footer">
-            <span>${t('menu.endingsFound', { count: endingsCount })}</span>
-            <span>v${config.version}</span>
-          </div>
+        </div>
+        <nav class="menu-list" aria-label="Menu principal">
+          <button class="menu-btn" id="btn-continue" ${recentSave ? '' : 'disabled'}>${t('menu.continue')}</button>
+          <button class="menu-btn" id="btn-new">${t('menu.newGame')}</button>
+          <button class="menu-btn" id="btn-chapters">${t('menu.chapters')}</button>
+          <button class="menu-btn" id="btn-notebook">${t('menu.notebook')} (${this.meta.unlockedWords.length}/${NOTEBOOK_WORDS.length})</button>
+          <button class="menu-btn" id="btn-gallery">${t('menu.gallery')}</button>
+          <button class="menu-btn" id="btn-saves">${t('menu.saves')}</button>
+          <button class="menu-btn" id="btn-options">${t('menu.options')}</button>
+          <button class="menu-btn" id="btn-credits">${t('menu.credits')}</button>
+        </nav>
+        <div class="title-footer">
+          <span>${t('menu.endingsFound', { count: endingsCount })}</span>
+          <span>·</span>
+          <span>Edição Portuguesa · v${config.version}</span>
         </div>
       </div>
     `;
@@ -295,11 +308,15 @@ export class FarolGameApp {
 
   private renderTopHud(): void {
     this.topHudEl.style.display = 'flex';
+    const scene = this.scenes.get(this.currentSceneId);
     const glowSize = 8 + this.vars.memoriasRecolhidas * 2.5;
     this.topHudEl.innerHTML = `
-      <div class="memory-beacon" title="Memórias recolhidas">
-        <span class="beacon-dot" style="box-shadow: 0 0 ${glowSize}px var(--accent-beacon)"></span>
-        <span>Memórias: ${this.vars.memoriasRecolhidas}/12</span>
+      <div class="hud-left-cluster">
+        <div class="scene-location-pill">${scene?.title ?? 'Névoa'}</div>
+        <div class="memory-beacon" title="Memórias recolhidas">
+          <span class="beacon-dot" style="box-shadow: 0 0 ${glowSize}px var(--accent-beacon)"></span>
+          <span>Memórias: ${this.vars.memoriasRecolhidas}/12</span>
+        </div>
       </div>
       <div class="hud-controls">
         <button class="hud-btn ${this.autoMode ? 'active' : ''}" id="hud-auto">${t('hud.auto')}</button>
@@ -330,6 +347,7 @@ export class FarolGameApp {
     this.rewindStack = [];
     this.inlineQueue = [];
     this.activeSprites = {};
+    this.currentSpeakerId = undefined;
     this.spriteStageEl.innerHTML = '';
     this.overlayContainerEl.innerHTML = '';
     this.enterScene(startSceneId, 0);
@@ -363,6 +381,7 @@ export class FarolGameApp {
   private setBackground(bgPath: string): void {
     this.currentBg = bgPath;
     this.bgEl.style.backgroundImage = `url('${bgPath}')`;
+    this.fx?.syncWithBackground(this.currentBg, this.currentCg);
   }
 
   private setCg(cgPath: string | null): void {
@@ -377,13 +396,16 @@ export class FarolGameApp {
     } else {
       this.cgEl.classList.remove('active');
     }
+    this.fx?.syncWithBackground(this.currentBg, this.currentCg);
   }
 
   private updateSpritesDom(): void {
     this.spriteStageEl.innerHTML = '';
-    for (const [charId, info] of Object.entries(this.activeSprites)) {
+    const entries = Object.entries(this.activeSprites);
+    for (const [charId, info] of entries) {
       const img = document.createElement('img');
-      img.className = `char-sprite pos-${info.pos}`;
+      const isSpeaking = !this.currentSpeakerId || this.currentSpeakerId === charId || entries.length === 1;
+      img.className = `char-sprite pos-${info.pos} ${isSpeaking ? 'speaking' : 'listening'}`;
       const relPath = `./assets/sprites/${charId}_${info.expr}.webp`;
       const assetMap = (window as unknown as { __ASSET_MAP__?: Record<string, string> }).__ASSET_MAP__;
       img.src = assetMap?.[relPath] ?? relPath;
@@ -451,16 +473,13 @@ export class FarolGameApp {
     let node: ScriptNode | undefined;
     if (this.inlineQueue.length > 0) {
       node = this.inlineQueue.shift();
-      this.pc--; // keep scene pc stable while draining inline queue
+      this.pc--;
     } else {
       node = scene.lines[this.pc];
     }
 
-    if (!node) {
-      return;
-    }
+    if (!node) return;
 
-    // Handle non-blocking nodes immediately
     if ('bg' in node) {
       this.setBackground(node.bg);
       this.pc++;
@@ -556,14 +575,14 @@ export class FarolGameApp {
     }
   }
 
-  private presentDialogueLine(
-    node: Extract<ScriptNode, { text: string }>
-  ): void {
+  private presentDialogueLine(node: Extract<ScriptNode, { text: string }>): void {
     this.dialogueWrapEl.style.display = 'flex';
-    if (node.expr && node.who && this.activeSprites[node.who]) {
+    this.currentSpeakerId = node.who;
+
+    if (node.who && node.expr && this.activeSprites[node.who]) {
       this.activeSprites[node.who].expr = node.expr;
-      this.updateSpritesDom();
     }
+    this.updateSpritesDom();
 
     if (node.sfx) {
       this.audio.playSfx(node.sfx);
@@ -584,11 +603,11 @@ export class FarolGameApp {
     const speakerInfo = node.who ? CHARACTER_DIRECTORY[node.who] : undefined;
     const speakerName = node.name ?? speakerInfo?.displayName;
     if (speakerName) {
-      this.speakerTagEl.style.display = 'inline-block';
+      this.speakerHeaderEl.style.display = 'inline-flex';
       this.speakerTagEl.textContent = speakerName;
       this.speakerTagEl.style.color = speakerInfo?.color ?? 'var(--accent-beacon)';
     } else {
-      this.speakerTagEl.style.display = 'none';
+      this.speakerHeaderEl.style.display = 'none';
     }
 
     const plainText = stripFormatting(node.text, this.vars);
@@ -609,7 +628,10 @@ export class FarolGameApp {
     this.runTypewriter(segments, wasRead);
   }
 
-  private async runTypewriter(segments: ReturnType<typeof parseDialogueText>, wasRead: boolean): Promise<void> {
+  private async runTypewriter(
+    segments: ReturnType<typeof parseDialogueText>,
+    wasRead: boolean
+  ): Promise<void> {
     this.isTyping = true;
     this.skipTypingRequested = false;
     this.dialogueTextEl.innerHTML = '';
@@ -663,7 +685,12 @@ export class FarolGameApp {
     }
   }
 
-  private presentChapterCard(card: { number: string; title: string; quote: string; image: string }): void {
+  private presentChapterCard(card: {
+    number: string;
+    title: string;
+    quote: string;
+    image: string;
+  }): void {
     this.dialogueWrapEl.style.display = 'none';
     this.overlayContainerEl.innerHTML = `
       <div class="chapter-card-overlay" style="background-image: url('${card.image}')">
@@ -671,6 +698,9 @@ export class FarolGameApp {
           <div class="chapter-num">${card.number}</div>
           <h2 class="chapter-title">${card.title}</h2>
           <p class="chapter-quote">${card.quote}</p>
+          <div style="margin-top:1.5rem;font-size:0.82rem;letter-spacing:0.18em;color:var(--accent-beacon);text-transform:uppercase">
+            Clica para iniciar →
+          </div>
         </div>
       </div>
     `;
@@ -686,7 +716,6 @@ export class FarolGameApp {
   private presentChoice(choiceRaw: ScriptChoice | ScriptChoiceOption[]): void {
     const choiceObj: ScriptChoice = Array.isArray(choiceRaw) ? { options: choiceRaw } : choiceRaw;
     const validOptions = choiceObj.options.filter((opt) => evaluateCondition(opt.when, this.vars));
-
     const hasTimer = Boolean(choiceObj.timeoutMs && !this.settings.disableTimers);
 
     this.overlayContainerEl.innerHTML = `
@@ -697,7 +726,7 @@ export class FarolGameApp {
             ? `<div class="choice-timer-bar"><div class="choice-timer-fill" id="choice-timer-fill" style="width:100%"></div></div>`
             : ''
         }
-        <div id="choice-buttons-wrap" style="display:flex;flex-direction:column;gap:0.75rem"></div>
+        <div id="choice-buttons-wrap" style="display:flex;flex-direction:column;gap:0.8rem"></div>
       </div>
     `;
 
@@ -811,20 +840,13 @@ export class FarolGameApp {
           visitedLocal.add(id);
 
           this.overlayContainerEl.innerHTML = '';
-          // Play the hotspot lines, then re-open hotspot layer or advance
           this.inlineQueue.unshift(...target.lines);
-          const checkDoneNode: ScriptNode = {
-            set: {},
-          };
-          void checkDoneNode;
-          // Temporarily hijack step completion by appending a return marker
           const allNowDone = hsScene.hotspots.every(
             (h) => visitedLocal.has(h.id) || Boolean(this.vars.flags[h.id])
           );
           if (allNowDone && hsScene.continueGoto) {
             this.inlineQueue.push({ goto: hsScene.continueGoto });
           } else {
-            // Re-present hotspot scene after lines finish
             this.inlineQueue.push({ hotspotScene: hsScene });
           }
           this.pc++;
@@ -860,7 +882,7 @@ export class FarolGameApp {
     }
 
     this.overlayContainerEl.innerHTML = `
-      <div class="chapter-card-overlay" style="background: rgba(12, 17, 23, 0.92)">
+      <div class="chapter-card-overlay" style="background: rgba(10, 14, 20, 0.92)">
         <div class="chapter-card-backdrop" style="max-width:740px">
           <div class="chapter-num">${ending.code}</div>
           <h2 class="chapter-title">${ending.title}</h2>
@@ -992,8 +1014,6 @@ export class FarolGameApp {
     this.stepExecution();
   }
 
-  // ==================== MODALS ====================
-
   private closeModal(): void {
     this.modalContainerEl.innerHTML = '';
   }
@@ -1096,7 +1116,7 @@ export class FarolGameApp {
                 <div class="word-card">
                   <h4>${tr.title}</h4>
                   <div class="word-meta">${tr.subtitle}</div>
-                  <button class="hud-btn play-track-btn" data-track="${tr.id}" style="margin-top:0.5rem;align-self:flex-start">▶ Ouvir faixa</button>
+                  <button class="hud-btn active play-track-btn" data-track="${tr.id}" style="margin-top:0.5rem;align-self:flex-start">▶ Ouvir faixa</button>
                 </div>
               `
               ).join('')}
@@ -1419,7 +1439,7 @@ export class FarolGameApp {
                   <h4>${c.title}</h4>
                   ${
                     c.unlocked
-                      ? `<button class="hud-btn start-chap-btn" data-scene="${c.id}" style="margin-top:0.6rem;align-self:flex-start">Iniciar capítulo</button>`
+                      ? `<button class="hud-btn active start-chap-btn" data-scene="${c.id}" style="margin-top:0.6rem;align-self:flex-start">Iniciar capítulo →</button>`
                       : `<span class="word-meta" style="margin-top:0.5rem">Em produção (Fase 2)</span>`
                   }
                 </div>
