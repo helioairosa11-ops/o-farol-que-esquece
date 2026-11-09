@@ -1,0 +1,74 @@
+{
+  "menu": {
+    "subtitle": "Uma história sobre o que o mar leva e o que a luz esconde",
+    "continue": "Continuar",
+    "newGame": "Novo Jogo",
+    "chapters": "Capítulos",
+    "gallery": "Galeria",
+    "notebook": "Caderno de Palavras",
+    "saves": "Salvar / Carregar",
+    "options": "Opções",
+    "credits": "Créditos",
+    "endingsFound": "Finais encontrados: {count}/5"
+  },
+  "hud": {
+    "auto": "Auto",
+    "skip": "Pular",
+    "backlog": "Histórico",
+    "rewind": "Voltar",
+    "notebook": "Caderno",
+    "saves": "Salvar",
+    "options": "Opções",
+    "menu": "Menu",
+    "quickSave": "Salvo rápido",
+    "quickLoad": "Carregamento rápido",
+    "memoryToast": "Isto ficará na memória.",
+    "wordUnlocked": "Nova palavra no caderno: «{word}»",
+    "objectFound": "Memória recolhida: {title}"
+  },
+  "options": {
+    "title": "Opções e Acessibilidade",
+    "textSpeed": "Velocidade do texto",
+    "autoDelay": "Pausa do modo automático",
+    "fontFamily": "Fonte",
+    "fontDefault": "Padrão (Source Sans 3)",
+    "fontHyperlegible": "Alta legibilidade (Atkinson)",
+    "fontDyslexic": "Dislexia (OpenDyslexic)",
+    "fontSize": "Tamanho do texto",
+    "highContrast": "Alto contraste",
+    "reduceMotion": "Reduzir movimento e efeitos",
+    "disableTimers": "Desativar limite de tempo nas escolhas",
+    "soundCaptions": "Legendas para sons importantes",
+    "language": "Idioma",
+    "musicVol": "Volume da música",
+    "ambientVol": "Volume do ambiente",
+    "sfxVol": "Volume dos efeitos",
+    "voiceVol": "Volume de voz",
+    "close": "Fechar"
+  },
+  "saves": {
+    "title": "Salvar e Carregar",
+    "autosave": "Salvamento Automático",
+    "quicksave": "Salvamento Rápido",
+    "slot": "Espaço {n}",
+    "empty": "Vazio",
+    "save": "Salvar",
+    "load": "Carregar",
+    "delete": "Apagar",
+    "export": "Exportar arquivo",
+    "import": "Importar arquivo"
+  },
+  "notebook": {
+    "title": "Caderno de Inês — Palavras sem tradução",
+    "subtitle": "Anotações guardadas no bolso do casaco desde a madrugada em que parti.",
+    "locked": "Palavra ainda por recordar",
+    "memoriesHeader": "Objetos-memória recolhidos ({count}/12)"
+  },
+  "gallery": {
+    "title": "Galeria da Vila de Névoa",
+    "cgs": "Ilustrações",
+    "music": "Música",
+    "characters": "Personagens",
+    "endings": "Finais"
+  }
+}

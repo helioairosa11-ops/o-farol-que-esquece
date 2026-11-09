@@ -1,0 +1,74 @@
+{
+  "menu": {
+    "subtitle": "A story about what the sea takes and what the light hides",
+    "continue": "Continue",
+    "newGame": "New Game",
+    "chapters": "Chapters",
+    "gallery": "Gallery",
+    "notebook": "Word Notebook",
+    "saves": "Save / Load",
+    "options": "Options",
+    "credits": "Credits",
+    "endingsFound": "Endings found: {count}/5"
+  },
+  "hud": {
+    "auto": "Auto",
+    "skip": "Skip",
+    "backlog": "Backlog",
+    "rewind": "Rewind",
+    "notebook": "Notebook",
+    "saves": "Save",
+    "options": "Options",
+    "menu": "Menu",
+    "quickSave": "Quick saved",
+    "quickLoad": "Quick loaded",
+    "memoryToast": "This will remain in memory.",
+    "wordUnlocked": "New word in notebook: «{word}»",
+    "objectFound": "Memory collected: {title}"
+  },
+  "options": {
+    "title": "Options & Accessibility",
+    "textSpeed": "Text speed",
+    "autoDelay": "Auto-advance delay",
+    "fontFamily": "Font family",
+    "fontDefault": "Default (Source Sans 3)",
+    "fontHyperlegible": "High legibility (Atkinson)",
+    "fontDyslexic": "Dyslexia-friendly (OpenDyslexic)",
+    "fontSize": "Font size",
+    "highContrast": "High contrast",
+    "reduceMotion": "Reduce motion & shader effects",
+    "disableTimers": "Disable timed choices",
+    "soundCaptions": "Captions for important sounds",
+    "language": "Language",
+    "musicVol": "Music volume",
+    "ambientVol": "Ambient volume",
+    "sfxVol": "SFX volume",
+    "voiceVol": "Voice volume",
+    "close": "Close"
+  },
+  "saves": {
+    "title": "Save & Load",
+    "autosave": "Autosave",
+    "quicksave": "Quicksave",
+    "slot": "Slot {n}",
+    "empty": "Empty",
+    "save": "Save",
+    "load": "Load",
+    "delete": "Delete",
+    "export": "Export file",
+    "import": "Import file"
+  },
+  "notebook": {
+    "title": "Inês's Notebook — Untranslatable Words",
+    "subtitle": "Notes kept in my coat pocket since the dawn I left.",
+    "locked": "Word yet to be remembered",
+    "memoriesHeader": "Memory objects collected ({count}/12)"
+  },
+  "gallery": {
+    "title": "Village of Névoa Gallery",
+    "cgs": "Illustrations",
+    "music": "Music",
+    "characters": "Characters",
+    "endings": "Endings"
+  }
+}
